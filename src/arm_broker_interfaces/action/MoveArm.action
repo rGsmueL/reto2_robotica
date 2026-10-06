@@ -1,0 +1,13 @@
+# priority: 0..255, MAYOR = MAS URGENTE
+float64[] joint_positions
+string client_id
+uint8 priority
+---
+bool success
+string message
+float64 wait_time_s
+float64 exec_time_s
+---
+string state
+int32 queue_position
+float64 elapsed_s

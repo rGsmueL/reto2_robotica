@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>arm_broker</name>
+  <version>0.1.0</version>
+  <description>Broker de acceso exclusivo al JetCobot</description>
+  <maintainer email="equipo@esan.edu.pe">equipo</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>arm_broker_interfaces</depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
