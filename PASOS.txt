@@ -1,0 +1,57 @@
+CLIENTE:
+git clone https://github.com/rGsmueL/reto2_robotica.git ~/rb2_ws
+
+export ROS_DOMAIN_ID=43
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DISCOVERY_SERVER="172.51.1.28:11811"
+
+ros2 daemon stop
+ros2 daemon start
+
+cd ~/rb2_ws
+colcon build
+source source /opt/ros/humble/setup.bash
+
+python3 cliente.py
+
+
+
+DRIVER EN JETSON:
+
+source /opt/ros/humble/setup.bash
+ros2 run jetcobot_driver sync_plan_nx
+
+
+
+BROKER EN JETSON:
+
+git clone https://github.com/rGsmueL/reto2_robotica.git ~/rb2_ws
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=43
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DISCOVERY_SERVER="172.51.1.28:11811"
+ros2 daemon stop
+ros2 daemon start
+cd ~/rb2_ws
+colcon build
+source install/setup.bash
+ros2 run arm_broker broker --ros-args -p politica:=fifo
+
+TERMINAL EN JETSON PARA GRABAR LA BOLSA
+
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DISCOVERY_SERVER="$JETSON:11811"
+source /opt/ros/humble/setup.bash
+ros2 daemon stop; ros2 daemon start
+
+ros2 bag record -o fifo /arm/queue_state /joint_states #si es que se usa fifo
+ros2 bag record -o prioridad /arm/queue_state /joint_states #si es que se usa prioridad
+
+EXPORTAR Y CALCULAR  METRICAS
+
+# Exportar rosbag a CSV
+python analisis/exportar_csv.py <ruta_bag_FIFO> fifo.csv
+python analisis/exportar_csv.py <ruta_bag_prioridad> prioridad.csv
+
+# Calcular métricas y generar gráfica comparativa
+python analisis/metricas.py --fifo fifo.csv --prio prioridad.csv --outdir analisis/salida
